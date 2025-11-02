@@ -1,0 +1,38 @@
+package hexlet.code.app;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import hexlet.code.app.repository.UserRepository;
+import lombok.Getter;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.web.servlet.MockMvc;
+
+@Getter
+@SpringBootTest
+@AutoConfigureMockMvc
+@Import(TestcontainersConfiguration.class)
+public class AppApplicationTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @BeforeEach
+    final void setUp() {
+        userRepository.deleteAll();
+    }
+
+    @Test
+    void contextLoads() {
+        // Test to ensure the application context loads successfully
+    }
+}

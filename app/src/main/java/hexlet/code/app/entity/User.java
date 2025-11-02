@@ -16,8 +16,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
+import static hexlet.code.app.constants.UserConstants.USER_FIELD_MAX_LENGTH;
+
 @Entity
-@Table(name = "users") // avoid reserved keyword "user" in some DBs
+@Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -29,20 +31,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 100)
+    @Column(length = USER_FIELD_MAX_LENGTH)
     private String firstName;
 
-    @Column(nullable = false, length = 100)
+    @Column(length = USER_FIELD_MAX_LENGTH)
     private String lastName;
 
-    @Column(nullable = false, unique = true, length = 150)
+    @Column(nullable = false, unique = true, length = USER_FIELD_MAX_LENGTH)
     private String email;
 
     @Column(nullable = false)
     private String password;
 
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
