@@ -1,6 +1,5 @@
 package hexlet.code.app.controller;
 
-import hexlet.code.app.AppApplicationTest;
 import hexlet.code.app.dto.UserCreateDto;
 import hexlet.code.app.dto.UserUpdateDto;
 import org.junit.jupiter.api.Test;
@@ -15,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc(addFilters = false)
-public class UserControllerTest extends AppApplicationTest {
+class UserControllerTest extends AppApplicationTest {
 
     @Test
     void shouldCreateUser() throws Exception {

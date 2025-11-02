@@ -1,4 +1,4 @@
-package hexlet.code.app;
+package hexlet.code.app.controller;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;

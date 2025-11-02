@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public abstract class UserMapper {
 
     @Autowired
+    @SuppressWarnings("java:S6813")
     private PasswordEncoder passwordEncoder;
 
     public abstract UserDto toDto(User user);

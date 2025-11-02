@@ -15,6 +15,7 @@ public class AdminInitializer implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    @SuppressWarnings("java:S6437")
     public final void run(String... args) {
         if (userRepository.findByEmail("hexlet@example.com").isEmpty()) {
             User admin = User.builder()

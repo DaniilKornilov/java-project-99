@@ -1,4 +1,4 @@
-package hexlet.code.app;
+package hexlet.code.app.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hexlet.code.app.repository.UserRepository;
@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Import(TestcontainersConfiguration.class)
-public class AppApplicationTest {
+class AppApplicationTest {
 
     @Autowired
     private MockMvc mockMvc;
