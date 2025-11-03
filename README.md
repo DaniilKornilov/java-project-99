@@ -15,7 +15,7 @@
 
 ## Run App
 ```bash
-cd app && make run
+make run
 ```
 
 ## App is running on Render.com
