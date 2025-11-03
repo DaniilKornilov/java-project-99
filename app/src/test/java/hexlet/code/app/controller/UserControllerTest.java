@@ -2,6 +2,7 @@ package hexlet.code.app.controller;
 
 import hexlet.code.app.dto.UserCreateDto;
 import hexlet.code.app.dto.UserUpdateDto;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
@@ -17,7 +18,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserControllerTest extends AppApplicationTest {
 
     @Test
-    void shouldCreateUser() throws Exception {
+    @SneakyThrows
+    void shouldCreateUser() {
         UserCreateDto dto = new UserCreateDto("john@google.com", "John", "Doe", "secret");
 
         getMockMvc().perform(post("/api/users")
@@ -30,7 +32,8 @@ class UserControllerTest extends AppApplicationTest {
     }
 
     @Test
-    void shouldReturnUser() throws Exception {
+    @SneakyThrows
+    void shouldReturnUser() {
         UserCreateDto dto = new UserCreateDto("jack@google.com", "Jack", "Jons", "pwd123");
         String response = getMockMvc().perform(post("/api/users")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -47,7 +50,8 @@ class UserControllerTest extends AppApplicationTest {
     }
 
     @Test
-    void shouldReturnUserList() throws Exception {
+    @SneakyThrows
+    void shouldReturnUserList() {
         UserCreateDto user1 = new UserCreateDto("john@google.com", "John", "Doe", "secret");
         UserCreateDto user2 = new UserCreateDto("jack@yahoo.com", "Jack", "Jons", "password");
 
@@ -78,7 +82,8 @@ class UserControllerTest extends AppApplicationTest {
     }
 
     @Test
-    void shouldUpdateUser() throws Exception {
+    @SneakyThrows
+    void shouldUpdateUser() {
         UserCreateDto dto = new UserCreateDto("anna@google.com", "Anna", "Smith", "pwd123");
         String response = getMockMvc().perform(post("/api/users")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -98,7 +103,8 @@ class UserControllerTest extends AppApplicationTest {
     }
 
     @Test
-    void shouldDeleteUser() throws Exception {
+    @SneakyThrows
+    void shouldDeleteUser() {
         UserCreateDto dto = new UserCreateDto("mike@google.com", "Mike", "Tyson", "pwd123");
         String response = getMockMvc().perform(post("/api/users")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -115,7 +121,8 @@ class UserControllerTest extends AppApplicationTest {
     }
 
     @Test
-    void shouldNotCreateUserWithInvalidEmail() throws Exception {
+    @SneakyThrows
+    void shouldNotCreateUserWithInvalidEmail() {
         UserCreateDto dto = new UserCreateDto("not-an-email", "Bad", "User", "pw");
 
         getMockMvc().perform(post("/api/users")

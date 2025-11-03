@@ -16,8 +16,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-import static hexlet.code.app.constants.UserConstants.USER_FIELD_MAX_LENGTH;
-
 @Entity
 @Table(name = "users")
 @Getter
@@ -26,6 +24,7 @@ import static hexlet.code.app.constants.UserConstants.USER_FIELD_MAX_LENGTH;
 @AllArgsConstructor
 @Builder
 public class User {
+    private static final int USER_FIELD_MAX_LENGTH = 50;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

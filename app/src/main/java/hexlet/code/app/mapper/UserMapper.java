@@ -14,12 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Mapper(componentModel = "spring")
-@SuppressWarnings("DesignForExtension")
 public abstract class UserMapper {
 
-    @Autowired
-    @SuppressWarnings("java:S6813")
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public final void setPasswordEncoder(PasswordEncoder encoder) {
+        this.passwordEncoder = encoder;
+    }
 
     public abstract UserDto toDto(User user);
 
@@ -31,7 +33,7 @@ public abstract class UserMapper {
     public abstract void updateUserFromDto(UserUpdateDto dto, @MappingTarget User user);
 
     @Named("encodePassword")
-    protected String encodePassword(String rawPassword) {
+    protected final String encodePassword(String rawPassword) {
         return rawPassword == null ? null : passwordEncoder.encode(rawPassword);
     }
 }

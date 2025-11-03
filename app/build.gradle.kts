@@ -61,6 +61,9 @@ dependencyManagement {
         dependency("org.mapstruct:mapstruct:1.6.3")
         dependency("org.mapstruct:mapstruct-processor:1.6.3")
         dependency("org.projectlombok:lombok-mapstruct-binding:0.2.0")
+        dependency("io.jsonwebtoken:jjwt-api:0.13.0")
+        dependency("io.jsonwebtoken:jjwt-impl:0.13.0")
+        dependency("io.jsonwebtoken:jjwt-jackson:0.13.0")
     }
 }
 
@@ -72,10 +75,13 @@ dependencies {
     implementation("org.flywaydb:flyway-database-postgresql")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.mapstruct:mapstruct")
+    implementation("io.jsonwebtoken:jjwt-api")
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-docker-compose")
     runtimeOnly("org.postgresql:postgresql")
     runtimeOnly("com.h2database:h2")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     annotationProcessor("org.projectlombok:lombok")
     annotationProcessor("org.mapstruct:mapstruct-processor")
