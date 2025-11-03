@@ -15,14 +15,14 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public final class UserService {
-    private static final String USER_NOT_FOUND = "User not found";
+    private static final String USER_NOT_FOUND = "User with id %s not found";
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
     public UserDto getById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND));
+                .orElseThrow(() -> new EntityNotFoundException(String.format(USER_NOT_FOUND, id)));
         return userMapper.toDto(user);
     }
 
@@ -40,14 +40,14 @@ public final class UserService {
 
     public UserDto updatePartial(Long id, UserUpdateDto dto) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND));
+                .orElseThrow(() -> new EntityNotFoundException(String.format(USER_NOT_FOUND, id)));
         userMapper.updateUserFromDto(dto, user);
         return userMapper.toDto(userRepository.save(user));
     }
 
     public void delete(Long id) {
         if (!userRepository.existsById(id)) {
-            throw new EntityNotFoundException(USER_NOT_FOUND);
+            throw new EntityNotFoundException(String.format(USER_NOT_FOUND, id));
         }
         userRepository.deleteById(id);
     }

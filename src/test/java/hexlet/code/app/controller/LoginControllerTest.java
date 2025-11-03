@@ -84,9 +84,23 @@ class LoginControllerTest extends AppApplicationTest {
 
     @Test
     @SneakyThrows
-    void shouldReturns200() {
+    void shouldReturns200ForAdmin() {
         String token = loginAndGetToken(adminUsername, adminPassword);
         getMockMvc().perform(get("/api/users")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @SneakyThrows
+    void shouldReturns200ForUser() {
+        User user = new User();
+        user.setEmail("user@user.ru");
+        user.setPassword(passwordEncoder.encode("userpass"));
+        getUserRepository().save(user);
+
+        String token = loginAndGetToken("user@user.ru", "userpass");
+        getMockMvc().perform(get("/api/task_statuses")
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk());
     }

@@ -25,11 +25,17 @@ public abstract class UserMapper {
 
     public abstract UserDto toDto(User user);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "password", source = "password", qualifiedByName = "encodePassword")
     public abstract User toEntity(UserCreateDto dto);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "password", source = "password", qualifiedByName = "encodePassword")
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public abstract void updateUserFromDto(UserUpdateDto dto, @MappingTarget User user);
 
     @Named("encodePassword")

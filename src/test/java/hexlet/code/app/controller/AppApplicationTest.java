@@ -1,6 +1,7 @@
 package hexlet.code.app.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hexlet.code.app.repository.TaskStatusRepository;
 import hexlet.code.app.repository.UserRepository;
 import lombok.Getter;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,9 +27,13 @@ class AppApplicationTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private TaskStatusRepository taskStatusRepository;
+
     @BeforeEach
     final void setUp() {
         userRepository.deleteAll();
+        taskStatusRepository.deleteAll();
     }
 
     @Test

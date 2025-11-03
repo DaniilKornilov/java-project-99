@@ -33,8 +33,9 @@ public class SecurityConfiguration {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/api/login").permitAll()
-                        .requestMatchers("/index.html").permitAll() .requestMatchers("/assets/**").permitAll()
+                        .requestMatchers("/index.html").permitAll().requestMatchers("/assets/**").permitAll()
                         .requestMatchers("/api/users/**").hasRole(ADMIN)
+                        .requestMatchers("/api/task_statuses/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
