@@ -1,4 +1,6 @@
-CREATE TABLE users
+CREATE SCHEMA IF NOT EXISTS task_manager;
+
+CREATE TABLE task_manager.users
 (
     id         BIGSERIAL PRIMARY KEY,
     first_name VARCHAR(50),

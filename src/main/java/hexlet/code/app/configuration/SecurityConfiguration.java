@@ -28,10 +28,12 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationFilter jwtFilter) {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/api/login").permitAll()
+                        .requestMatchers("/index.html").permitAll() .requestMatchers("/assets/**").permitAll()
                         .requestMatchers("/api/users/**").hasRole(ADMIN)
                         .anyRequest().authenticated()
                 )

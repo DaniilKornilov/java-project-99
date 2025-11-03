@@ -1,13 +1,13 @@
 FROM eclipse-temurin:21-jdk-alpine AS builder
 WORKDIR /app
 
-COPY app/gradlew app/*.gradle.kts app/settings.gradle.kts ./
-COPY app/gradle ./gradle
+COPY gradlew *.gradle.kts settings.gradle.kts ./
+COPY /gradle ./gradle
 RUN chmod +x gradlew
 
 RUN ./gradlew dependencies --no-daemon
 
-COPY app/ .
+COPY / .
 
 RUN ./gradlew bootJar --no-daemon
 

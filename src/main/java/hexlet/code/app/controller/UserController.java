@@ -32,8 +32,11 @@ public final class UserController {
     }
 
     @GetMapping
-    public List<UserDto> getAllUsers() {
-        return userService.getAll();
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        List<UserDto> users = userService.getAll();
+        return ResponseEntity.ok()
+                .header("X-Total-Count", String.valueOf(users.size()))
+                .body(users);
     }
 
     @PostMapping
