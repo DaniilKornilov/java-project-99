@@ -114,3 +114,9 @@ tasks.test {
     useJUnitPlatform()
     finalizedBy(tasks.jacocoTestReport)
 }
+
+tasks.matching { it.name.startsWith("sentry") }.configureEach {
+    onlyIf {
+        !System.getenv("SENTRY_AUTH_TOKEN").isNullOrBlank()
+    }
+}
