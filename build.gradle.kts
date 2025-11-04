@@ -8,7 +8,7 @@ plugins {
     id("jacoco")
     id("com.github.ben-manes.versions") version "0.53.0"
     id("org.sonarqube") version "7.0.1.6134"
-    id("org.springframework.boot") version "3.5.7"
+    id("org.springframework.boot") version "3.4.4"
     id("io.spring.dependency-management") version "1.1.7"
     id("io.sentry.jvm.gradle") version "5.12.2"
 }
