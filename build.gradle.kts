@@ -6,6 +6,7 @@ plugins {
     id("org.sonarqube") version "7.0.1.6134"
     id("org.springframework.boot") version "3.5.7"
     id("io.spring.dependency-management") version "1.1.7"
+    id("io.sentry.jvm.gradle") version "5.12.2"
 }
 
 group = "hexlet.code"
@@ -44,6 +45,14 @@ sonar {
         property("sonar.projectKey", "DaniilKornilov_java-project-99")
         property("sonar.organization", "daniilkornilov")
     }
+}
+
+sentry {
+    includeSourceContext = true
+
+    org = "daniilkornilov"
+    projectName = "java-spring-boot"
+    authToken = System.getenv("SENTRY_AUTH_TOKEN")
 }
 
 configurations {
