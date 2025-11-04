@@ -16,8 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static hexlet.code.constant.UserConstants.ADMIN;
-
 @Configuration
 @EnableWebSecurity
 @SuppressWarnings({"DesignForExtension", "java:S4502"})
@@ -35,7 +33,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/", "/api/login").permitAll()
                         .requestMatchers("/index.html", "/assets/**").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
-                        .requestMatchers("/api/users/**").hasRole(ADMIN)
+                        .requestMatchers("/api/users/**").authenticated()
                         .requestMatchers("/api/task_statuses/**").authenticated()
                         .requestMatchers("/api/tasks/**").authenticated()
                         .requestMatchers("/api/labels/**").authenticated()
