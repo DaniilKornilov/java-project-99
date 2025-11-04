@@ -1,6 +1,7 @@
 package hexlet.code.app.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hexlet.code.app.repository.LabelRepository;
 import hexlet.code.app.repository.TaskRepository;
 import hexlet.code.app.repository.TaskStatusRepository;
 import hexlet.code.app.repository.UserRepository;
@@ -34,8 +35,12 @@ class AppApplicationTest {
     @Autowired
     private TaskRepository taskRepository;
 
+    @Autowired
+    private LabelRepository labelRepository;
+
     @BeforeEach
     final void setUp() {
+        labelRepository.deleteAll();
         taskRepository.deleteAll();
         userRepository.deleteAll();
         taskStatusRepository.deleteAll();

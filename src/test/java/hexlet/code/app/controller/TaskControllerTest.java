@@ -1,5 +1,6 @@
 package hexlet.code.app.controller;
 
+import hexlet.code.app.dto.LabelCreateDto;
 import hexlet.code.app.dto.TaskCreateDto;
 import hexlet.code.app.dto.TaskStatusCreateDto;
 import hexlet.code.app.dto.TaskUpdateDto;
@@ -8,6 +9,8 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
+
+import java.util.Set;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -41,12 +44,24 @@ class TaskControllerTest extends AppApplicationTest {
         return getObjectMapper().readTree(response).get("slug").asText();
     }
 
+    @SneakyThrows
+    private Long createLabelAndReturnId() {
+        LabelCreateDto dto = new LabelCreateDto("label-name");
+        String response = getMockMvc().perform(post("/api/labels")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(getObjectMapper().writeValueAsString(dto)))
+                .andReturn().getResponse().getContentAsString();
+
+        return getObjectMapper().readTree(response).get("id").asLong();
+    }
+
     @Test
     @SneakyThrows
     void shouldCreateTask() {
         Long assigneeId = createUserAndReturnId();
         String slug = createTaskStatusAndReturnSlug();
-        TaskCreateDto dto = new TaskCreateDto(1, assigneeId, "New Title", "New content", slug);
+        Long labelId = createLabelAndReturnId();
+        TaskCreateDto dto = new TaskCreateDto(1, assigneeId, "New Title", "New content", slug, Set.of(labelId));
 
         getMockMvc().perform(post("/api/tasks")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -58,6 +73,7 @@ class TaskControllerTest extends AppApplicationTest {
                 .andExpect(jsonPath("$.content").value("New content"))
                 .andExpect(jsonPath("$.status").value(slug))
                 .andExpect(jsonPath("$.assigneeId").value(assigneeId))
+                .andExpect(jsonPath("$.taskLabelIds").isArray())
                 .andExpect(jsonPath("$.createdAt").exists());
     }
 
@@ -66,7 +82,7 @@ class TaskControllerTest extends AppApplicationTest {
     void shouldReturnTask() {
         Long assigneeId = createUserAndReturnId();
         String slug = createTaskStatusAndReturnSlug();
-        TaskCreateDto dto = new TaskCreateDto(1, assigneeId, "New Title", "New content", slug);
+        TaskCreateDto dto = new TaskCreateDto(1, assigneeId, "New Title", "New content", slug, Set.of());
 
         String response = getMockMvc().perform(post("/api/tasks")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -83,6 +99,7 @@ class TaskControllerTest extends AppApplicationTest {
                 .andExpect(jsonPath("$.content").value("New content"))
                 .andExpect(jsonPath("$.status").value(slug))
                 .andExpect(jsonPath("$.assigneeId").value(assigneeId))
+                .andExpect(jsonPath("$.taskLabelIds").isArray())
                 .andExpect(jsonPath("$.createdAt").exists());
     }
 
@@ -91,8 +108,8 @@ class TaskControllerTest extends AppApplicationTest {
     void shouldReturnTaskList() {
         Long assigneeId = createUserAndReturnId();
         String slug = createTaskStatusAndReturnSlug();
-        TaskCreateDto task1 = new TaskCreateDto(1, assigneeId, "New Title 1", "New content 1", slug);
-        TaskCreateDto task2 = new TaskCreateDto(2, assigneeId, "New Title 2", "New content 2", slug);
+        TaskCreateDto task1 = new TaskCreateDto(1, assigneeId, "New Title 1", "New content 1", slug, Set.of());
+        TaskCreateDto task2 = new TaskCreateDto(2, assigneeId, "New Title 2", "New content 2", slug, Set.of());
 
         getMockMvc().perform(post("/api/tasks")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -114,6 +131,7 @@ class TaskControllerTest extends AppApplicationTest {
                 .andExpect(jsonPath("$[0].content").value("New content 1"))
                 .andExpect(jsonPath("$[0].status").value(slug))
                 .andExpect(jsonPath("$[0].assigneeId").value(assigneeId))
+                .andExpect(jsonPath("$[0].taskLabelIds").isArray())
                 .andExpect(jsonPath("$[0].createdAt").exists())
                 .andExpect(jsonPath("$[1].id").exists())
                 .andExpect(jsonPath("$[1].title").value("New Title 2"))
@@ -121,6 +139,7 @@ class TaskControllerTest extends AppApplicationTest {
                 .andExpect(jsonPath("$[1].content").value("New content 2"))
                 .andExpect(jsonPath("$[1].status").value(slug))
                 .andExpect(jsonPath("$[1].assigneeId").value(assigneeId))
+                .andExpect(jsonPath("$[0].taskLabelIds").isArray())
                 .andExpect(jsonPath("$[1].createdAt").exists());
     }
 
@@ -129,7 +148,7 @@ class TaskControllerTest extends AppApplicationTest {
     void shouldUpdateTask() {
         Long assigneeId = createUserAndReturnId();
         String slug = createTaskStatusAndReturnSlug();
-        TaskCreateDto dto = new TaskCreateDto(1, assigneeId, "New Title", "New content", slug);
+        TaskCreateDto dto = new TaskCreateDto(1, assigneeId, "New Title", "New content", slug, Set.of());
 
         String response = getMockMvc().perform(post("/api/tasks")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -138,7 +157,8 @@ class TaskControllerTest extends AppApplicationTest {
 
         Long id = getObjectMapper().readTree(response).get("id").asLong();
 
-        TaskUpdateDto updateDto = new TaskUpdateDto(2, null, "New Title Updated", null, null);
+        Long labelId = createLabelAndReturnId();
+        TaskUpdateDto updateDto = new TaskUpdateDto(2, null, "New Title Updated", null, null, Set.of(labelId));
 
         getMockMvc().perform(put("/api/tasks/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -150,6 +170,7 @@ class TaskControllerTest extends AppApplicationTest {
                 .andExpect(jsonPath("$.content").value("New content"))
                 .andExpect(jsonPath("$.status").value(slug))
                 .andExpect(jsonPath("$.assigneeId").value(assigneeId))
+                .andExpect(jsonPath("$.taskLabelIds").isArray())
                 .andExpect(jsonPath("$.createdAt").exists());
     }
 
@@ -158,7 +179,7 @@ class TaskControllerTest extends AppApplicationTest {
     void shouldDeleteTask() {
         Long assigneeId = createUserAndReturnId();
         String slug = createTaskStatusAndReturnSlug();
-        TaskCreateDto dto = new TaskCreateDto(1, assigneeId, "New Title", "New content", slug);
+        TaskCreateDto dto = new TaskCreateDto(1, assigneeId, "New Title", "New content", slug, Set.of());
 
         String response = getMockMvc().perform(post("/api/tasks")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -178,7 +199,7 @@ class TaskControllerTest extends AppApplicationTest {
     @SneakyThrows
     void shouldNotCreateTaskWithInvalidSlug() {
         Long assigneeId = createUserAndReturnId();
-        TaskCreateDto dto = new TaskCreateDto(1, assigneeId, "New Title", "New content", "invalid");
+        TaskCreateDto dto = new TaskCreateDto(1, assigneeId, "New Title", "New content", "invalid", Set.of());
 
         getMockMvc().perform(post("/api/tasks")
                         .contentType(MediaType.APPLICATION_JSON)

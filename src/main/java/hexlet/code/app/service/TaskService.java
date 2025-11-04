@@ -3,10 +3,12 @@ package hexlet.code.app.service;
 import hexlet.code.app.dto.TaskCreateDto;
 import hexlet.code.app.dto.TaskDto;
 import hexlet.code.app.dto.TaskUpdateDto;
+import hexlet.code.app.entity.Label;
 import hexlet.code.app.entity.Task;
 import hexlet.code.app.entity.TaskStatus;
 import hexlet.code.app.entity.User;
 import hexlet.code.app.mapper.TaskMapper;
+import hexlet.code.app.repository.LabelRepository;
 import hexlet.code.app.repository.TaskRepository;
 import hexlet.code.app.repository.TaskStatusRepository;
 import hexlet.code.app.repository.UserRepository;
@@ -14,8 +16,11 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import static hexlet.code.app.constant.ErrorMessages.LABEL_NOT_FOUND;
 import static hexlet.code.app.constant.ErrorMessages.TASK_NOT_FOUND;
 import static hexlet.code.app.constant.ErrorMessages.TASK_STATUS_NOT_FOUND;
 import static hexlet.code.app.constant.ErrorMessages.USER_NOT_FOUND;
@@ -27,6 +32,7 @@ public final class TaskService {
     private final TaskRepository taskRepository;
     private final TaskStatusRepository taskStatusRepository;
     private final UserRepository userRepository;
+    private final LabelRepository labelRepository;
 
     public TaskDto getById(Long id) {
         Task task = taskRepository.findById(id)
@@ -50,6 +56,9 @@ public final class TaskService {
         String slug = dto.status();
         linkTaskStatusBySlug(slug, task);
 
+        Set<Long> taskLabelIds = dto.taskLabelIds();
+        linkLabelsByIds(taskLabelIds, task);
+
         return taskMapper.toDto(taskRepository.save(task));
     }
 
@@ -66,6 +75,9 @@ public final class TaskService {
             linkTaskStatusBySlug(slug, task);
         }
 
+        Set<Long> taskLabelIds = dto.taskLabelIds();
+        linkLabelsByIds(taskLabelIds, task);
+
         return taskMapper.toDto(taskRepository.save(task));
     }
 
@@ -74,6 +86,22 @@ public final class TaskService {
             throw new EntityNotFoundException(String.format(TASK_NOT_FOUND, id));
         }
         taskRepository.deleteById(id);
+    }
+
+    public void linkLabelsByIds(Set<Long> labelIds, Task task) {
+        if (labelIds == null || labelIds.isEmpty()) {
+            return;
+        }
+
+        List<Label> labels = labelRepository.findAllById(labelIds);
+        labelIds.forEach(id -> {
+            boolean exists = labels.stream().anyMatch(label -> label.getId().equals(id));
+            if (!exists) {
+                throw new IllegalArgumentException(String.format(LABEL_NOT_FOUND, id));
+            }
+        });
+
+        task.setLabels(new HashSet<>(labels));
     }
 
     private void assignUserIfPresent(Long assigneeId, Task task) {

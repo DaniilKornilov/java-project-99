@@ -1,6 +1,7 @@
 package hexlet.code.app.dto;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 public record TaskDto(Long id,
                       Integer index,
@@ -8,5 +9,6 @@ public record TaskDto(Long id,
                       Long assigneeId,
                       String title,
                       String content,
-                      String status) {
+                      String status,
+                      Set<Long> taskLabelIds) {
 }

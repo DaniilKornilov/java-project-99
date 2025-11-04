@@ -33,10 +33,12 @@ public class SecurityConfiguration {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/api/login").permitAll()
-                        .requestMatchers("/index.html").permitAll().requestMatchers("/assets/**").permitAll()
+                        .requestMatchers("/index.html", "/assets/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         .requestMatchers("/api/users/**").hasRole(ADMIN)
                         .requestMatchers("/api/task_statuses/**").authenticated()
                         .requestMatchers("/api/tasks/**").authenticated()
+                        .requestMatchers("/api/labels/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

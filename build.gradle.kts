@@ -64,6 +64,8 @@ dependencyManagement {
         dependency("io.jsonwebtoken:jjwt-api:0.13.0")
         dependency("io.jsonwebtoken:jjwt-impl:0.13.0")
         dependency("io.jsonwebtoken:jjwt-jackson:0.13.0")
+        dependency("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13")
+        dependency("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.20.1")
     }
 }
 
@@ -77,6 +79,8 @@ dependencies {
     implementation("org.mapstruct:mapstruct")
     implementation("io.jsonwebtoken:jjwt-api")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-docker-compose")
     runtimeOnly("org.postgresql:postgresql")
