@@ -36,6 +36,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/index.html").permitAll().requestMatchers("/assets/**").permitAll()
                         .requestMatchers("/api/users/**").hasRole(ADMIN)
                         .requestMatchers("/api/task_statuses/**").authenticated()
+                        .requestMatchers("/api/tasks/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

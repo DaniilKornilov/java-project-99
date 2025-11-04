@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static hexlet.code.app.constant.ErrorMessages.USER_NOT_FOUND;
+
 @Service
 @RequiredArgsConstructor
 public final class UserService {
-    private static final String USER_NOT_FOUND = "User with id %s not found";
-
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 

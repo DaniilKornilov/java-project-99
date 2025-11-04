@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static hexlet.code.app.constant.ErrorMessages.TASK_STATUS_NOT_FOUND;
+
 @Service
 @RequiredArgsConstructor
 public final class TaskStatusService {
-    private static final String TASK_STATUS_NOT_FOUND = "Task status with id %s not found";
-
     private final TaskStatusRepository taskStatusRepository;
     private final TaskStatusMapper taskStatusMapper;
 

@@ -103,6 +103,10 @@ class LoginControllerTest extends AppApplicationTest {
         getMockMvc().perform(get("/api/task_statuses")
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk());
+
+        getMockMvc().perform(get("/api/tasks")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk());
     }
 
     @Test
