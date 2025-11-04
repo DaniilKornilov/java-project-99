@@ -24,7 +24,7 @@ java {
 }
 
 springBoot {
-    mainClass.set("hexlet.code.app.AppApplication")
+    mainClass.set("hexlet.code.AppApplication")
 }
 
 checkstyle {
