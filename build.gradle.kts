@@ -1,3 +1,7 @@
+val mapstructVersion = "1.6.3"
+val jjwtVersion = "0.13.0"
+val springDocVersion = "2.8.13"
+
 plugins {
     id("application")
     id("checkstyle")
@@ -49,7 +53,6 @@ sonar {
 
 sentry {
     includeSourceContext = true
-
     org = "daniilkornilov"
     projectName = "java-spring-boot"
     authToken = System.getenv("SENTRY_AUTH_TOKEN")
@@ -65,19 +68,6 @@ repositories {
     mavenCentral()
 }
 
-dependencyManagement {
-    dependencies {
-        dependency("org.mapstruct:mapstruct:1.6.3")
-        dependency("org.mapstruct:mapstruct-processor:1.6.3")
-        dependency("org.projectlombok:lombok-mapstruct-binding:0.2.0")
-        dependency("io.jsonwebtoken:jjwt-api:0.13.0")
-        dependency("io.jsonwebtoken:jjwt-impl:0.13.0")
-        dependency("io.jsonwebtoken:jjwt-jackson:0.13.0")
-        dependency("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13")
-        dependency("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.20.1")
-    }
-}
-
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-security")
@@ -85,31 +75,25 @@ dependencies {
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-database-postgresql")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.mapstruct:mapstruct")
-    implementation("io.jsonwebtoken:jjwt-api")
+    implementation("org.mapstruct:mapstruct:${mapstructVersion}")
+    implementation("io.jsonwebtoken:jjwt-api:${jjwtVersion}")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${springDocVersion}")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-docker-compose")
     runtimeOnly("org.postgresql:postgresql")
     runtimeOnly("com.h2database:h2")
-    runtimeOnly("io.jsonwebtoken:jjwt-impl")
-    runtimeOnly("io.jsonwebtoken:jjwt-jackson")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:${jjwtVersion}")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:${jjwtVersion}")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     annotationProcessor("org.projectlombok:lombok")
-    annotationProcessor("org.mapstruct:mapstruct-processor")
-    annotationProcessor("org.projectlombok:lombok-mapstruct-binding")
+    annotationProcessor("org.mapstruct:mapstruct-processor:${mapstructVersion}")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:postgresql")
-    testImplementation("org.mapstruct:mapstruct")
-    testImplementation("org.springdoc:springdoc-openapi-starter-webmvc-ui")
-    testImplementation("io.jsonwebtoken:jjwt-impl")
-    testImplementation("io.jsonwebtoken:jjwt-jackson")
-    testImplementation("io.jsonwebtoken:jjwt-api")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testCompileOnly("org.projectlombok:lombok")
     testAnnotationProcessor("org.projectlombok:lombok")
