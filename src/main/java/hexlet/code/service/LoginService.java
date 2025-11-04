@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public final class LoginService {
     private final UserDetailsService databaseUserDetailsService;
-    private final AuthenticationManager authenticationManager;
+    private final AuthenticationManager authManager;
     private final JwtUtils jwtUtils;
 
     public String login(LoginDto loginDto) {
-        authenticationManager.authenticate(
+        authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDto.username(), loginDto.password()));
 
         UserDetails user = databaseUserDetailsService.loadUserByUsername(loginDto.username());
