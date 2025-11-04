@@ -145,6 +145,42 @@ class TaskControllerTest extends AppApplicationTest {
 
     @Test
     @SneakyThrows
+    void shouldReturnFilteredTaskList() {
+        Long assigneeId = createUserAndReturnId();
+        String slug = createTaskStatusAndReturnSlug();
+
+        TaskCreateDto task1 = new TaskCreateDto(1, assigneeId, "Create API", "Content 1", slug, Set.of());
+        TaskCreateDto task2 = new TaskCreateDto(2, assigneeId, "Fix Bug", "Content 2", slug, Set.of());
+
+        getMockMvc().perform(post("/api/tasks")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(getObjectMapper().writeValueAsString(task1)))
+                .andExpect(status().isCreated());
+
+        getMockMvc().perform(post("/api/tasks")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(getObjectMapper().writeValueAsString(task2)))
+                .andExpect(status().isCreated());
+
+        getMockMvc().perform(get("/api/tasks")
+                        .param("titleCont", "Create")
+                        .param("assigneeId", assigneeId.toString())
+                        .param("status", slug))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].id").exists())
+                .andExpect(jsonPath("$[0].title").value("Create API"))
+                .andExpect(jsonPath("$[0].index").value(1))
+                .andExpect(jsonPath("$[0].content").value("Content 1"))
+                .andExpect(jsonPath("$[0].status").value(slug))
+                .andExpect(jsonPath("$[0].assigneeId").value(assigneeId))
+                .andExpect(jsonPath("$[0].taskLabelIds").isArray())
+                .andExpect(jsonPath("$[0].createdAt").exists());
+    }
+
+    @Test
+    @SneakyThrows
     void shouldUpdateTask() {
         Long assigneeId = createUserAndReturnId();
         String slug = createTaskStatusAndReturnSlug();

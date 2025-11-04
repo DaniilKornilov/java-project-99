@@ -2,6 +2,7 @@ package hexlet.code.app.service;
 
 import hexlet.code.app.dto.TaskCreateDto;
 import hexlet.code.app.dto.TaskDto;
+import hexlet.code.app.dto.TaskFilter;
 import hexlet.code.app.dto.TaskUpdateDto;
 import hexlet.code.app.entity.Label;
 import hexlet.code.app.entity.Task;
@@ -10,10 +11,12 @@ import hexlet.code.app.entity.User;
 import hexlet.code.app.mapper.TaskMapper;
 import hexlet.code.app.repository.LabelRepository;
 import hexlet.code.app.repository.TaskRepository;
+import hexlet.code.app.repository.TaskSpecification;
 import hexlet.code.app.repository.TaskStatusRepository;
 import hexlet.code.app.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -40,8 +43,14 @@ public final class TaskService {
         return taskMapper.toDto(task);
     }
 
-    public List<TaskDto> getAll() {
-        return taskRepository.findAll()
+    public List<TaskDto> getAll(TaskFilter filter) {
+        Specification<Task> spec = Specification.allOf(
+                TaskSpecification.titleContains(filter.titleCont()),
+                TaskSpecification.hasAssignee(filter.assigneeId()),
+                TaskSpecification.hasStatus(filter.status()),
+                TaskSpecification.hasLabel(filter.labelId())
+        );
+        return taskRepository.findAll(spec)
                 .stream()
                 .map(taskMapper::toDto)
                 .toList();
