@@ -6,6 +6,7 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -83,6 +84,7 @@ class UserControllerTest extends AppApplicationTest {
 
     @Test
     @SneakyThrows
+    @WithMockUser(username = "anna@google.com")
     void shouldUpdateUser() {
         UserCreateDto dto = new UserCreateDto("anna@google.com", "Anna", "Smith", "pwd123");
         String response = getMockMvc().perform(post("/api/users")
@@ -104,6 +106,7 @@ class UserControllerTest extends AppApplicationTest {
 
     @Test
     @SneakyThrows
+    @WithMockUser(username = "mike@google.com")
     void shouldDeleteUser() {
         UserCreateDto dto = new UserCreateDto("mike@google.com", "Mike", "Tyson", "pwd123");
         String response = getMockMvc().perform(post("/api/users")

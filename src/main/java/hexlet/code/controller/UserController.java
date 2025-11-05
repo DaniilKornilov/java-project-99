@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +23,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
-public final class UserController {
+@SuppressWarnings("DesignForExtension")
+public class UserController {
 
     private final UserService userService;
 
@@ -45,12 +47,14 @@ public final class UserController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("@userUtils.isUser(#id)")
     public ResponseEntity<UserDto> updateUser(@PathVariable Long id,
                                               @Valid @RequestBody UserUpdateDto dto) {
         return ResponseEntity.ok(userService.updatePartial(id, dto));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("@userUtils.isUser(#id)")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.delete(id);
         return ResponseEntity.noContent().build();

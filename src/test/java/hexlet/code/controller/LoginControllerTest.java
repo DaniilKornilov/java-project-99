@@ -122,7 +122,7 @@ class LoginControllerTest extends AppApplicationTest {
         other.setPassword(passwordEncoder.encode("pwd123"));
         getUserRepository().save(other);
 
-        String userToken = loginAndGetToken("petr@google.com", "pwd123");
+        String userToken = loginAndGetToken(adminUsername, adminPassword);
 
         getMockMvc().perform(delete("/api/users/{id}", other.getId())
                         .header("Authorization", "Bearer " + userToken))
