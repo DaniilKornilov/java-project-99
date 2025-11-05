@@ -1,10 +1,10 @@
 package hexlet.code.controller;
 
 import hexlet.code.dto.LoginDto;
+import hexlet.code.dto.UserCreateDto;
 import hexlet.code.entity.User;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -115,7 +115,6 @@ class LoginControllerTest extends AppApplicationTest {
     }
 
     @Test
-    @Disabled // Disable until I know the reason while hexlet tests fail
     @SneakyThrows
     void shouldReturn403NotEnoughRights() {
         User other = new User();
@@ -132,16 +131,20 @@ class LoginControllerTest extends AppApplicationTest {
 
     @Test
     @SneakyThrows
-    void shouldReturn204EnoughRights() {
+    void shouldReturn201EnoughRights() {
         String adminToken = loginAndGetToken(adminUsername, adminPassword);
 
-        User victim = new User();
-        victim.setEmail("victim@google.com");
-        victim.setPassword(passwordEncoder.encode("pwd123"));
-        getUserRepository().save(victim);
+        UserCreateDto request = new UserCreateDto(
+                "victim@google.com",
+                null,
+                null,
+                "pwd123"
+        );
 
-        getMockMvc().perform(delete("/api/users/{id}", victim.getId())
+        getMockMvc().perform(post("/api/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(getObjectMapper().writeValueAsString(request))
                         .header("Authorization", "Bearer " + adminToken))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isCreated());
     }
 }

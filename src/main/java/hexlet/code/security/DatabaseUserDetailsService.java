@@ -16,8 +16,6 @@ import static org.springframework.security.core.userdetails.User.withUsername;
 @Component
 @RequiredArgsConstructor
 public final class DatabaseUserDetailsService implements UserDetailsService {
-    private static final String ROLE_PREFIX = "ROLE_";
-
     @Value("${admin.username}")
     private String username;
 
@@ -30,9 +28,9 @@ public final class DatabaseUserDetailsService implements UserDetailsService {
 
         String authorities;
         if (user.getEmail().equals(username)) {
-            authorities = ROLE_PREFIX + ADMIN;
+            authorities = ADMIN;
         } else {
-            authorities = ROLE_PREFIX + USER;
+            authorities = USER;
         }
 
         return withUsername(user.getEmail())
