@@ -10,10 +10,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-@Component
 @RequiredArgsConstructor
 public final class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -28,7 +26,6 @@ public final class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) {
-
         String authHeader = request.getHeader(AUTH_HEADER_NAME);
         if (authHeader == null || !authHeader.startsWith(AUTHENTICATION_SCHEME)) {
             filterChain.doFilter(request, response);

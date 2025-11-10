@@ -1,6 +1,7 @@
 package hexlet.code.configuration;
 
 import hexlet.code.security.JwtAuthenticationFilter;
+import hexlet.code.security.JwtUtils;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +26,9 @@ public class SecurityConfiguration {
 
     @Bean
     @SneakyThrows
-    public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationFilter jwtFilter) {
+    public SecurityFilterChain filterChain(HttpSecurity http,
+                                           UserDetailsService databaseUserDetailsService,
+                                           JwtUtils jwtUtils) {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
@@ -37,7 +40,8 @@ public class SecurityConfiguration {
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtUtils, databaseUserDetailsService),
+                        UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
